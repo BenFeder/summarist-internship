@@ -1,11 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { AiFillFileText, AiFillBulb, AiFillAudio } from "react-icons/ai";
 import { BsStarFill, BsStarHalf } from "react-icons/bs";
 import { BiCrown } from "react-icons/bi";
 import { RiLeafLine } from "react-icons/ri";
+import { AiOutlineClose, AiOutlineUser } from "react-icons/ai";
 import "./style.css";
 
 function App() {
+  const [showLoginModal, setShowLoginModal] = useState(false);
+
+  const openLoginModal = () => {
+    setShowLoginModal(true);
+  };
+
+  const closeLoginModal = () => {
+    setShowLoginModal(false);
+  };
+
   return (
     <>
       <nav className="nav">
@@ -14,7 +25,9 @@ function App() {
             <img className="nav__img" src="" alt="logo" />
           </figure>
           <ul className="nav__list--wrapper">
-            <li className="nav__list nav__list--login">Login</li>
+            <li className="nav__list nav__list--login" onClick={openLoginModal}>
+              Login
+            </li>
             <li className="nav__list nav__list--mobile">About</li>
             <li className="nav__list nav__list--mobile">Contact</li>
             <li className="nav__list nav__list--mobile">Help</li>
@@ -37,7 +50,9 @@ function App() {
                   <br className="remove--tablet" />
                   and even people who don't like to read.
                 </div>
-                <button className="btn home__cta--btn">Login</button>
+                <button className="btn home__cta--btn" onClick={openLoginModal}>
+                  Login
+                </button>
               </div>
               <figure className="landing__image--mask">
                 <img src="./assets/landing.png" alt="landing" />
@@ -240,7 +255,9 @@ function App() {
               </div>
             </div>
             <div className="reviews__btn--wrapper">
-              <button className="btn home__cta--btn">Login</button>
+              <button className="btn home__cta--btn" onClick={openLoginModal}>
+                Login
+              </button>
             </div>
           </div>
         </div>
@@ -368,6 +385,36 @@ function App() {
           </div>
         </div>
       </section>
+
+      {showLoginModal && (
+        <div className="modal__overlay" onClick={closeLoginModal}>
+          <div className="modal__content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal__header">
+              <h2 className="modal__title">Login to Summarist</h2>
+              <button className="modal__close" onClick={closeLoginModal}>
+                <AiOutlineClose />
+              </button>
+            </div>
+            <button className="modal__guest-btn">
+              <AiOutlineUser className="modal__guest-icon" />
+              Login as a Guest
+            </button>
+            <div className="modal__separator">or</div>
+            <input
+              type="email"
+              placeholder="Email Address"
+              className="modal__input"
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              className="modal__input"
+            />
+            <button className="modal__login-btn">Login</button>
+            <div className="modal__footer">Don't have an account?</div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
