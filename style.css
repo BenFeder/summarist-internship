@@ -638,7 +638,7 @@ button:disabled {
 }
 
 .modal__guest-btn {
-  background-color: #032b41;
+  background-color: #3a7bbd;
   color: white;
   border: none;
   border-radius: 4px;
@@ -655,7 +655,7 @@ button:disabled {
 }
 
 .modal__guest-btn:hover {
-  background-color: #044063;
+  background-color: #2d5f92;
 }
 
 .modal__guest-icon {
