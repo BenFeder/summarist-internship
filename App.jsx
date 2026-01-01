@@ -3,7 +3,7 @@ import { AiFillFileText, AiFillBulb, AiFillAudio } from "react-icons/ai";
 import { BsStarFill, BsStarHalf } from "react-icons/bs";
 import { BiCrown } from "react-icons/bi";
 import { RiLeafLine } from "react-icons/ri";
-import { AiOutlineClose, AiOutlineUser } from "react-icons/ai";
+import Modal from "./components/modal";
 import "./style.css";
 
 function App() {
@@ -386,35 +386,7 @@ function App() {
         </div>
       </section>
 
-      {showLoginModal && (
-        <div className="modal__overlay" onClick={closeLoginModal}>
-          <div className="modal__content" onClick={(e) => e.stopPropagation()}>
-            <div className="modal__header">
-              <h2 className="modal__title">Login to Summarist</h2>
-              <button className="modal__close" onClick={closeLoginModal}>
-                <AiOutlineClose />
-              </button>
-            </div>
-            <button className="modal__guest-btn">
-              <AiOutlineUser className="modal__guest-icon" />
-              Login as a Guest
-            </button>
-            <div className="modal__separator">or</div>
-            <input
-              type="email"
-              placeholder="Email Address"
-              className="modal__input"
-            />
-            <input
-              type="password"
-              placeholder="Password"
-              className="modal__input"
-            />
-            <button className="modal__login-btn">Login</button>
-            <div className="modal__footer">Don't have an account?</div>
-          </div>
-        </div>
-      )}
+      <Modal show={showLoginModal} onClose={closeLoginModal} />
     </>
   );
 }
