@@ -54,7 +54,7 @@ function Home() {
                 </button>
               </div>
               <figure className="landing__image--mask">
-                <img src="./assets/landing.png" alt="landing" />
+                <img src="../assets/landing.png" alt="landing" />
               </figure>
             </div>
           </div>
