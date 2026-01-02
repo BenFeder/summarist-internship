@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import React, { useState, useEffect, useRef } from "react";
-=======
-import React, { useState, useEffect } from "react";
->>>>>>> ee142e072c9153bd33d680d9921639875bae32c4
 import { useParams, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
@@ -12,24 +8,17 @@ import {
   AiOutlineQuestionCircle,
 } from "react-icons/ai";
 import { BsBookmark, BsHighlights } from "react-icons/bs";
-<<<<<<< HEAD
 import { FiSettings, FiLogIn, FiLogOut, FiPlay, FiPause } from "react-icons/fi";
 import { MdReplay10, MdForward10 } from "react-icons/md";
 import { signOut } from "firebase/auth";
 import { auth, db } from "../firebase-config";
 import { doc, setDoc } from "firebase/firestore";
-=======
-import { FiSettings, FiLogIn, FiLogOut } from "react-icons/fi";
-import { signOut } from "firebase/auth";
-import { auth } from "../firebase-config";
->>>>>>> ee142e072c9153bd33d680d9921639875bae32c4
 import { clearUser } from "../redux/userSlice";
 import Modal from "../components/modal";
 
 function Player() {
   const { id } = useParams();
   const dispatch = useDispatch();
-<<<<<<< HEAD
   const { isAuthenticated, user } = useSelector((state) => state.user);
   const uid = user?.uid;
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -39,12 +28,6 @@ function Player() {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const audioRef = useRef(null);
-=======
-  const { isAuthenticated } = useSelector((state) => state.user);
-  const [showLoginModal, setShowLoginModal] = useState(false);
-  const [book, setBook] = useState(null);
-  const [loading, setLoading] = useState(true);
->>>>>>> ee142e072c9153bd33d680d9921639875bae32c4
 
   useEffect(() => {
     const fetchBook = async () => {
@@ -66,7 +49,6 @@ function Player() {
     fetchBook();
   }, [id]);
 
-<<<<<<< HEAD
   useEffect(() => {
     const handleAudioEnded = async () => {
       if (!uid || !book) return;
@@ -150,16 +132,10 @@ function Player() {
     return `${minutes}:${seconds.toString().padStart(2, "0")}`;
   };
 
-=======
->>>>>>> ee142e072c9153bd33d680d9921639875bae32c4
   const handleSignOut = async () => {
     try {
       await signOut(auth);
       dispatch(clearUser());
-<<<<<<< HEAD
-=======
-      console.log("User signed out");
->>>>>>> ee142e072c9153bd33d680d9921639875bae32c4
     } catch (error) {
       console.error("Error signing out:", error.message);
     }
@@ -221,7 +197,6 @@ function Player() {
         {loading ? (
           <div className="player-loading">Loading...</div>
         ) : book ? (
-<<<<<<< HEAD
           <>
             <div className="player-header">
               <h1 className="player-header__title">{book.title}</h1>
@@ -230,25 +205,11 @@ function Player() {
               <p className="player-summary__text">{book.summary}</p>
             </div>
           </>
-=======
-          <div className="player-container">
-            <h1 className="player-title">{book.title}</h1>
-            <div className="player-divider"></div>
-            <div className="player-summary">{book.summary}</div>
-            {book.audioLink && (
-              <audio controls className="player-audio">
-                <source src={book.audioLink} type="audio/mpeg" />
-                Your browser does not support the audio element.
-              </audio>
-            )}
-          </div>
->>>>>>> ee142e072c9153bd33d680d9921639875bae32c4
         ) : (
           <div className="player-error">Book not found</div>
         )}
       </main>
 
-<<<<<<< HEAD
       {book && book.audioLink && (
         <div className="player-audio-footer">
           <audio
@@ -314,8 +275,6 @@ function Player() {
         </div>
       )}
 
-=======
->>>>>>> ee142e072c9153bd33d680d9921639875bae32c4
       <Modal show={showLoginModal} onClose={() => setShowLoginModal(false)} />
     </div>
   );

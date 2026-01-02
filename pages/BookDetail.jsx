@@ -212,9 +212,7 @@ function BookDetail() {
                     <div className="book-detail-stat">
                       <BiTime className="book-detail-stat__icon" />
                       <span className="book-detail-stat__text">
-                        {book.audioLink
-                          ? formatDuration(audioDuration)
-                          : "N/A"}
+                        {book.audioLink ? formatDuration(audioDuration) : "N/A"}
                       </span>
                     </div>
                     <div className="book-detail-stat">
@@ -228,7 +226,6 @@ function BookDetail() {
 
                 <div className="book-detail-header__divider"></div>
 
-<<<<<<< HEAD
                 <div className="book-detail-header__buttons">
                   <Link
                     to={
@@ -269,24 +266,6 @@ function BookDetail() {
                       : "Add title to My Library"}
                   </span>
                 </div>
-=======
-                <div className="book-detail-actions">
-                  <Link
-                    to={`/player/${id}`}
-                    className="book-detail-action book-detail-action--read"
-                  >
-                    <IoBookOutline className="book-detail-action__icon" />
-                    <span className="book-detail-action__text">Read</span>
-                  </Link>
-                  <Link
-                    to={`/player/${id}`}
-                    className="book-detail-action book-detail-action--listen"
-                  >
-                    <FiMic className="book-detail-action__icon" />
-                    <span className="book-detail-action__text">Listen</span>
-                  </Link>
-                </div>
->>>>>>> ee142e072c9153bd33d680d9921639875bae32c4
               </div>
 
               <div className="book-detail-header__image-wrapper">

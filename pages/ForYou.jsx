@@ -8,7 +8,15 @@ import {
   AiOutlineQuestionCircle,
 } from "react-icons/ai";
 import { BsBookmark, BsHighlights } from "react-icons/bs";
-import { FiSettings, FiLogIn, FiLogOut, FiPlay, FiStar, FiClock } from "react-icons/fi";
+import {
+  FiSettings,
+  FiLogIn,
+  FiLogOut,
+  FiPlay,
+  FiStar,
+  FiClock,
+  FiEdit,
+} from "react-icons/fi";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase-config";
 import { clearUser } from "../redux/userSlice";
@@ -167,7 +175,7 @@ function ForYou() {
               <span>My Library</span>
             </Link>
             <div className="sidebar__link sidebar__link--disabled">
-              <BsHighlights className="sidebar__icon" />
+              <FiEdit className="sidebar__icon" />
               <span>Highlights</span>
             </div>
             <div className="sidebar__link sidebar__link--disabled">
