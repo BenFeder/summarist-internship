@@ -10,6 +10,7 @@ import BookDetail from "./pages/BookDetail";
 import Library from "./pages/Library";
 import Player from "./pages/Player";
 import Settings from "./pages/Settings";
+import ChoosePlan from "./pages/ChoosePlan";
 import "./style.css";
 
 function App() {
@@ -40,6 +41,7 @@ function App() {
       <Route path="/library" element={<Library />} />
       <Route path="/player/:id" element={<Player />} />
       <Route path="/settings" element={<Settings />} />
+      <Route path="/choose-plan" element={<ChoosePlan />} />
     </Routes>
   );
 }
