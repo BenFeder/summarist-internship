@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import {
@@ -18,9 +18,11 @@ import Modal from "../components/modal";
 
 function Player() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { isAuthenticated, user } = useSelector((state) => state.user);
   const uid = user?.uid;
+  const isSubscribed = user?.isSubscribed || false;
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [book, setBook] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -48,6 +50,12 @@ function Player() {
 
     fetchBook();
   }, [id]);
+
+  useEffect(() => {
+    if (book && book.subscriptionRequired && !isSubscribed) {
+      navigate("/choose-plan");
+    }
+  }, [book, isSubscribed, navigate]);
 
   useEffect(() => {
     const handleAudioEnded = async () => {
