@@ -839,6 +839,7 @@ button:disabled {
 .for-you-content {
   flex: 1;
   padding: 40px;
+  padding-right: 256px;
   overflow-y: auto;
   position: relative;
 }
@@ -852,7 +853,7 @@ button:disabled {
 .search-bar-container {
   position: absolute;
   top: 40px;
-  right: 40px;
+  right: 256px;
   width: 400px;
   z-index: 100;
 }
