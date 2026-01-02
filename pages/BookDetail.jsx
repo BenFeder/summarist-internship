@@ -12,6 +12,7 @@ import {
 import { BsBookmark, BsBookmarkFill, BsHighlights } from "react-icons/bs";
 import { FiSettings, FiLogIn, FiLogOut, FiMic } from "react-icons/fi";
 import { BiTime } from "react-icons/bi";
+import { IoBookOutline } from "react-icons/io5";
 import { signOut } from "firebase/auth";
 import { auth, db } from "../firebase-config";
 import { doc, setDoc, deleteDoc, getDoc } from "firebase/firestore";
@@ -227,6 +228,7 @@ function BookDetail() {
 
                 <div className="book-detail-header__divider"></div>
 
+<<<<<<< HEAD
                 <div className="book-detail-header__buttons">
                   <Link
                     to={
@@ -267,6 +269,24 @@ function BookDetail() {
                       : "Add title to My Library"}
                   </span>
                 </div>
+=======
+                <div className="book-detail-actions">
+                  <Link
+                    to={`/player/${id}`}
+                    className="book-detail-action book-detail-action--read"
+                  >
+                    <IoBookOutline className="book-detail-action__icon" />
+                    <span className="book-detail-action__text">Read</span>
+                  </Link>
+                  <Link
+                    to={`/player/${id}`}
+                    className="book-detail-action book-detail-action--listen"
+                  >
+                    <FiMic className="book-detail-action__icon" />
+                    <span className="book-detail-action__text">Listen</span>
+                  </Link>
+                </div>
+>>>>>>> ee142e072c9153bd33d680d9921639875bae32c4
               </div>
 
               <div className="book-detail-header__image-wrapper">
