@@ -580,6 +580,18 @@ button:disabled {
   }
 }
 
+/* SIDEBAR BASE STYLES */
+.sidebar {
+  width: 200px;
+  background-color: #f7faf9;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-right: 1px solid #e1e7ea;
+  padding: 24px 0;
+  margin-right: 184px;
+}
+
 /* HAMBURGER MENU */
 .hamburger-menu {
   display: none;
@@ -1402,17 +1414,6 @@ button:disabled {
   display: flex;
   height: 100vh;
   overflow: hidden;
-}
-
-.sidebar {
-  width: 200px;
-  background-color: #f7faf9;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  border-right: 1px solid #e1e7ea;
-  padding: 24px 0;
-  margin-right: 184px;
 }
 
 .sidebar__logo {
