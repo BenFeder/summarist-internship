@@ -165,20 +165,22 @@ function Library() {
       <Sidebar isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
 
       <main className="library-content">
-        <button className="hamburger-menu" onClick={toggleSidebar}>
-          {isSidebarOpen ? <AiOutlineClose /> : <AiOutlineMenu />}
-        </button>
-        <div className="search-bar-container">
-          <div className="search-bar">
-            <input
-              type="text"
-              className="search-bar__input"
-              placeholder="Search for books"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-            <div className="search-bar__divider"></div>
-            <AiOutlineSearch className="search-bar__icon" />
+        <div className="mobile-header-wrapper">
+          <button className="hamburger-menu" onClick={toggleSidebar}>
+            {isSidebarOpen ? <AiOutlineClose /> : <AiOutlineMenu />}
+          </button>
+          <div className="search-bar-container">
+            <div className="search-bar">
+              <input
+                type="text"
+                className="search-bar__input"
+                placeholder="Search for books"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              <div className="search-bar__divider"></div>
+              <AiOutlineSearch className="search-bar__icon" />
+            </div>
           </div>
           {searchQuery.trim() !== "" && searchResults.length === 0 && (
             <div className="search-results">

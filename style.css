@@ -689,22 +689,33 @@ button:disabled {
     display: block;
   }
 
-  /* Hamburger menu */
-  .hamburger-menu {
+  /* Mobile header wrapper */
+  .mobile-header-wrapper {
     position: fixed;
     top: 16px;
+    left: 12px;
     right: 12px;
-    z-index: 101;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 1100;
+  }
+
+  /* Hamburger menu */
+  .hamburger-menu {
+    position: static !important;
+    flex-shrink: 0;
+    margin-left: auto;
   }
 
   /* Search bar container */
   .search-bar-container {
-    position: fixed;
-    top: 16px;
-    left: 12px;
-    right: 68px;
-    width: auto !important;
-    z-index: 100;
+    position: relative;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 80% !important;
+    flex: 0 0 80%;
   }
 
   .search-bar-container::after {
@@ -1000,21 +1011,20 @@ button:disabled {
     width: 85%;
   }
 
-  .hamburger-menu {
+  .mobile-header-wrapper {
     top: 12px;
+    left: 8px;
     right: 8px;
+  }
+
+  .hamburger-menu {
     width: 40px;
     height: 40px;
     font-size: 20px;
-    position: fixed;
-    z-index: 101;
   }
 
   .search-bar-container {
-    top: 12px;
-    left: 8px;
-    right: 56px;
-    position: fixed;
+    /* Styles inherited from main mobile section */
   }
 
   .search-bar {
