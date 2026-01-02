@@ -20,6 +20,9 @@ function ForYou() {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [selectedBook, setSelectedBook] = useState(null);
   const [recommendedBooks, setRecommendedBooks] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [allBooks, setAllBooks] = useState([]);
 
   useEffect(() => {
     const fetchSelectedBook = async () => {
@@ -29,6 +32,12 @@ function ForYou() {
         );
         if (response.data && response.data[0]) {
           setSelectedBook(response.data[0]);
+          setAllBooks((prevBooks) => {
+            const bookExists = prevBooks.some(
+              (b) => b.id === response.data[0].id
+            );
+            return bookExists ? prevBooks : [...prevBooks, response.data[0]];
+          });
         }
       } catch (error) {
         console.error("Error fetching selected book:", error);
@@ -42,6 +51,13 @@ function ForYou() {
         );
         if (response.data) {
           setRecommendedBooks(response.data.slice(0, 8));
+          setAllBooks((prevBooks) => {
+            const existingIds = new Set(prevBooks.map((b) => b.id));
+            const newBooks = response.data.filter(
+              (book) => !existingIds.has(book.id)
+            );
+            return [...prevBooks, ...newBooks];
+          });
         }
       } catch (error) {
         console.error("Error fetching recommended books:", error);
@@ -51,6 +67,28 @@ function ForYou() {
     fetchSelectedBook();
     fetchRecommendedBooks();
   }, []);
+
+  useEffect(() => {
+    if (searchQuery.trim() === "") {
+      setSearchResults([]);
+      return;
+    }
+
+    const query = searchQuery.toLowerCase();
+    const filtered = allBooks.filter((book) => {
+      return (
+        book.title.toLowerCase().includes(query) ||
+        book.author.toLowerCase().includes(query)
+      );
+    });
+
+    // Remove any duplicate results based on book ID
+    const uniqueFiltered = filtered.filter(
+      (book, index, self) => index === self.findIndex((b) => b.id === book.id)
+    );
+
+    setSearchResults(uniqueFiltered);
+  }, [searchQuery, allBooks]);
 
   const handleSignOut = async () => {
     try {
@@ -114,6 +152,54 @@ function ForYou() {
         </div>
       </aside>
       <main className="for-you-content">
+        <div className="search-bar-container">
+          <div className="search-bar">
+            <input
+              type="text"
+              className="search-bar__input"
+              placeholder="Search for books"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            <div className="search-bar__divider"></div>
+            <AiOutlineSearch className="search-bar__icon" />
+          </div>
+          {searchQuery.trim() !== "" && searchResults.length === 0 && (
+            <div className="search-results">
+              <div className="search-no-results">No books found</div>
+            </div>
+          )}
+          {searchResults.length > 0 && (
+            <div className="search-results">
+              {searchResults.map((book) => (
+                <Link
+                  key={book.id}
+                  to={`/book/${book.id}`}
+                  className="search-result"
+                  onClick={() => setSearchQuery("")}
+                >
+                  <img
+                    src={book.imageLink}
+                    alt={book.title}
+                    className="search-result__image"
+                  />
+                  <div className="search-result__info">
+                    <h4 className="search-result__title">{book.title}</h4>
+                    <p className="search-result__author">{book.author}</p>
+                    <div className="search-result__duration">
+                      <FiPlay className="search-result__play-icon" />
+                      <span>
+                        {book.audioLink
+                          ? `${Math.floor(book.totalRating)} min`
+                          : "N/A"}
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
+        </div>
         <div className="selected-section">
           <h2 className="selected-section__title">Selected just for you</h2>
           {selectedBook ? (
@@ -164,11 +250,18 @@ function ForYou() {
                   to={`/book/${book.id}`}
                   className="recommended-book"
                 >
-                  <img
-                    src={book.imageLink}
-                    alt={book.title}
-                    className="recommended-book__image"
-                  />
+                  {book.subscriptionRequired && (
+                    <span className="recommended-book__premium-badge">
+                      Premium
+                    </span>
+                  )}
+                  <div className="recommended-book__image-wrapper">
+                    <img
+                      src={book.imageLink}
+                      alt={book.title}
+                      className="recommended-book__image"
+                    />
+                  </div>
                   <h4 className="recommended-book__title">{book.title}</h4>
                   <p className="recommended-book__author">{book.author}</p>
                   <p className="recommended-book__subtitle">{book.subTitle}</p>
