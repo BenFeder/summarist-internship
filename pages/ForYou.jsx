@@ -19,6 +19,7 @@ function ForYou() {
   const { isAuthenticated } = useSelector((state) => state.user);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [selectedBook, setSelectedBook] = useState(null);
+  const [recommendedBooks, setRecommendedBooks] = useState([]);
 
   useEffect(() => {
     const fetchSelectedBook = async () => {
@@ -34,7 +35,21 @@ function ForYou() {
       }
     };
 
+    const fetchRecommendedBooks = async () => {
+      try {
+        const response = await axios.get(
+          "https://us-central1-summaristt.cloudfunctions.net/getBooks?status=recommended"
+        );
+        if (response.data) {
+          setRecommendedBooks(response.data.slice(0, 8));
+        }
+      } catch (error) {
+        console.error("Error fetching recommended books:", error);
+      }
+    };
+
     fetchSelectedBook();
+    fetchRecommendedBooks();
   }, []);
 
   const handleSignOut = async () => {
@@ -104,7 +119,9 @@ function ForYou() {
           {selectedBook ? (
             <Link to={`/book/${selectedBook.id}`} className="selected-book">
               <div className="selected-book__content">
-                <p className="selected-book__subtitle">{selectedBook.subTitle}</p>
+                <p className="selected-book__subtitle">
+                  {selectedBook.subTitle}
+                </p>
               </div>
               <div className="selected-book__divider"></div>
               <div className="selected-book__details">
@@ -119,7 +136,9 @@ function ForYou() {
                   <div className="selected-book__audio">
                     <FiPlay className="selected-book__play-icon" />
                     <span className="selected-book__duration">
-                      {selectedBook.audioLink ? `${Math.floor(selectedBook.totalRating)} min` : "N/A"}
+                      {selectedBook.audioLink
+                        ? `${Math.floor(selectedBook.totalRating)} min`
+                        : "N/A"}
                     </span>
                   </div>
                 </div>
@@ -130,6 +149,46 @@ function ForYou() {
               <p>Loading...</p>
             </div>
           )}
+        </div>
+
+        <div className="recommended-section">
+          <h2 className="recommended-section__title">Recommended For You</h2>
+          <p className="recommended-section__subtitle">
+            We think you'll like these
+          </p>
+          <div className="recommended-books">
+            <div className="recommended-books__slider">
+              {recommendedBooks.map((book) => (
+                <Link
+                  key={book.id}
+                  to={`/book/${book.id}`}
+                  className="recommended-book"
+                >
+                  <img
+                    src={book.imageLink}
+                    alt={book.title}
+                    className="recommended-book__image"
+                  />
+                  <h4 className="recommended-book__title">{book.title}</h4>
+                  <p className="recommended-book__author">{book.author}</p>
+                  <p className="recommended-book__subtitle">{book.subTitle}</p>
+                  <div className="recommended-book__footer">
+                    <div className="recommended-book__audio">
+                      <FiPlay className="recommended-book__play-icon" />
+                      <span className="recommended-book__duration">
+                        {book.audioLink
+                          ? `${Math.floor(book.totalRating)} min`
+                          : "N/A"}
+                      </span>
+                    </div>
+                    <div className="recommended-book__rating">
+                      <span>⭐ {book.averageRating || "N/A"}</span>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
         </div>
       </main>
 
