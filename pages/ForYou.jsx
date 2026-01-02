@@ -20,6 +20,7 @@ function ForYou() {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [selectedBook, setSelectedBook] = useState(null);
   const [recommendedBooks, setRecommendedBooks] = useState([]);
+  const [suggestedBooks, setSuggestedBooks] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [allBooks, setAllBooks] = useState([]);
@@ -64,8 +65,29 @@ function ForYou() {
       }
     };
 
+    const fetchSuggestedBooks = async () => {
+      try {
+        const response = await axios.get(
+          "https://us-central1-summaristt.cloudfunctions.net/getBooks?status=suggested"
+        );
+        if (response.data) {
+          setSuggestedBooks(response.data.slice(0, 8));
+          setAllBooks((prevBooks) => {
+            const existingIds = new Set(prevBooks.map((b) => b.id));
+            const newBooks = response.data.filter(
+              (book) => !existingIds.has(book.id)
+            );
+            return [...prevBooks, ...newBooks];
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching suggested books:", error);
+      }
+    };
+
     fetchSelectedBook();
     fetchRecommendedBooks();
+    fetchSuggestedBooks();
   }, []);
 
   useEffect(() => {
@@ -275,6 +297,51 @@ function ForYou() {
                       </span>
                     </div>
                     <div className="recommended-book__rating">
+                      <span>⭐ {book.averageRating || "N/A"}</span>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="suggested-section">
+          <h2 className="suggested-section__title">Suggested Books</h2>
+          <p className="suggested-section__subtitle">Browse those books</p>
+          <div className="suggested-books">
+            <div className="suggested-books__slider">
+              {suggestedBooks.map((book) => (
+                <Link
+                  key={book.id}
+                  to={`/book/${book.id}`}
+                  className="suggested-book"
+                >
+                  {book.subscriptionRequired && (
+                    <span className="suggested-book__premium-badge">
+                      Premium
+                    </span>
+                  )}
+                  <div className="suggested-book__image-wrapper">
+                    <img
+                      src={book.imageLink}
+                      alt={book.title}
+                      className="suggested-book__image"
+                    />
+                  </div>
+                  <h4 className="suggested-book__title">{book.title}</h4>
+                  <p className="suggested-book__author">{book.author}</p>
+                  <p className="suggested-book__subtitle">{book.subTitle}</p>
+                  <div className="suggested-book__footer">
+                    <div className="suggested-book__audio">
+                      <FiPlay className="suggested-book__play-icon" />
+                      <span className="suggested-book__duration">
+                        {book.audioLink
+                          ? `${Math.floor(book.totalRating)} min`
+                          : "N/A"}
+                      </span>
+                    </div>
+                    <div className="suggested-book__rating">
                       <span>⭐ {book.averageRating || "N/A"}</span>
                     </div>
                   </div>
