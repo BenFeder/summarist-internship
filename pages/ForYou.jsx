@@ -8,11 +8,12 @@ import {
   AiOutlineQuestionCircle,
 } from "react-icons/ai";
 import { BsBookmark, BsHighlights } from "react-icons/bs";
-import { FiSettings, FiLogIn, FiLogOut, FiPlay } from "react-icons/fi";
+import { FiSettings, FiLogIn, FiLogOut, FiPlay, FiStar, FiClock } from "react-icons/fi";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase-config";
 import { clearUser } from "../redux/userSlice";
 import Modal from "../components/modal";
+import { getAudioDuration, formatDuration } from "../utils/audioUtils";
 
 function ForYou() {
   const dispatch = useDispatch();
@@ -24,6 +25,7 @@ function ForYou() {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [allBooks, setAllBooks] = useState([]);
+  const [audioDurations, setAudioDurations] = useState({});
 
   useEffect(() => {
     const fetchSelectedBook = async () => {
@@ -111,6 +113,32 @@ function ForYou() {
 
     setSearchResults(uniqueFiltered);
   }, [searchQuery, allBooks]);
+
+  useEffect(() => {
+    const loadAudioDurations = async () => {
+      const durations = {};
+
+      await Promise.all(
+        allBooks.map(async (book) => {
+          if (book.audioLink) {
+            try {
+              const duration = await getAudioDuration(book.audioLink);
+              durations[book.id] = duration;
+            } catch (error) {
+              console.error(`Error loading duration for ${book.id}:`, error);
+              durations[book.id] = null;
+            }
+          }
+        })
+      );
+
+      setAudioDurations(durations);
+    };
+
+    if (allBooks.length > 0) {
+      loadAudioDurations();
+    }
+  }, [allBooks]);
 
   const handleSignOut = async () => {
     try {
@@ -212,7 +240,7 @@ function ForYou() {
                       <FiPlay className="search-result__play-icon" />
                       <span>
                         {book.audioLink
-                          ? `${Math.floor(book.totalRating)} min`
+                          ? formatDuration(audioDurations[book.id])
                           : "N/A"}
                       </span>
                     </div>
@@ -242,10 +270,10 @@ function ForYou() {
                   <h3 className="selected-book__title">{selectedBook.title}</h3>
                   <p className="selected-book__author">{selectedBook.author}</p>
                   <div className="selected-book__audio">
-                    <FiPlay className="selected-book__play-icon" />
+                    <FiClock className="selected-book__play-icon" />
                     <span className="selected-book__duration">
                       {selectedBook.audioLink
-                        ? `${Math.floor(selectedBook.totalRating)} min`
+                        ? formatDuration(audioDurations[selectedBook.id])
                         : "N/A"}
                     </span>
                   </div>
@@ -283,21 +311,27 @@ function ForYou() {
                       alt={book.title}
                       className="recommended-book__image"
                     />
+                    {book.audioLink && (
+                      <span className="recommended-book__duration-overlay">
+                        {formatDuration(audioDurations[book.id])}
+                      </span>
+                    )}
                   </div>
                   <h4 className="recommended-book__title">{book.title}</h4>
                   <p className="recommended-book__author">{book.author}</p>
                   <p className="recommended-book__subtitle">{book.subTitle}</p>
                   <div className="recommended-book__footer">
                     <div className="recommended-book__audio">
-                      <FiPlay className="recommended-book__play-icon" />
+                      <FiClock className="recommended-book__play-icon" />
                       <span className="recommended-book__duration">
                         {book.audioLink
-                          ? `${Math.floor(book.totalRating)} min`
+                          ? formatDuration(audioDurations[book.id])
                           : "N/A"}
                       </span>
                     </div>
                     <div className="recommended-book__rating">
-                      <span>⭐ {book.averageRating || "N/A"}</span>
+                      <FiStar className="recommended-book__star-icon" />
+                      <span>{book.averageRating || "N/A"}</span>
                     </div>
                   </div>
                 </Link>
@@ -328,21 +362,27 @@ function ForYou() {
                       alt={book.title}
                       className="suggested-book__image"
                     />
+                    {book.audioLink && (
+                      <span className="suggested-book__duration-overlay">
+                        {formatDuration(audioDurations[book.id])}
+                      </span>
+                    )}
                   </div>
                   <h4 className="suggested-book__title">{book.title}</h4>
                   <p className="suggested-book__author">{book.author}</p>
                   <p className="suggested-book__subtitle">{book.subTitle}</p>
                   <div className="suggested-book__footer">
                     <div className="suggested-book__audio">
-                      <FiPlay className="suggested-book__play-icon" />
+                      <FiClock className="suggested-book__play-icon" />
                       <span className="suggested-book__duration">
                         {book.audioLink
-                          ? `${Math.floor(book.totalRating)} min`
+                          ? formatDuration(audioDurations[book.id])
                           : "N/A"}
                       </span>
                     </div>
                     <div className="suggested-book__rating">
-                      <span>⭐ {book.averageRating || "N/A"}</span>
+                      <FiStar className="suggested-book__star-icon" />
+                      <span>{book.averageRating || "N/A"}</span>
                     </div>
                   </div>
                 </Link>

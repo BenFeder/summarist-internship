@@ -9,21 +9,28 @@ import {
   AiOutlineStar,
   AiOutlineBulb,
 } from "react-icons/ai";
-import { BsBookmark, BsHighlights } from "react-icons/bs";
+import { BsBookmark, BsBookmarkFill, BsHighlights } from "react-icons/bs";
 import { FiSettings, FiLogIn, FiLogOut, FiMic } from "react-icons/fi";
 import { BiTime } from "react-icons/bi";
 import { signOut } from "firebase/auth";
-import { auth } from "../firebase-config";
+import { auth, db } from "../firebase-config";
+import { doc, setDoc, deleteDoc, getDoc } from "firebase/firestore";
 import { clearUser } from "../redux/userSlice";
 import Modal from "../components/modal";
+import { getAudioDuration, formatDuration } from "../utils/audioUtils";
 
 function BookDetail() {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const { isAuthenticated } = useSelector((state) => state.user);
+  const { isAuthenticated, user } = useSelector((state) => state.user);
+  const uid = user?.uid;
+  const isSubscribed = user?.isSubscribed || false;
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [book, setBook] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isSaved, setIsSaved] = useState(null); // Start as null instead of false
+  const [audioDuration, setAudioDuration] = useState(null);
+  const [checkingStatus, setCheckingStatus] = useState(true);
 
   useEffect(() => {
     const fetchBook = async () => {
@@ -45,11 +52,75 @@ function BookDetail() {
     fetchBook();
   }, [id]);
 
+  useEffect(() => {
+    const checkIfSaved = async () => {
+      if (!uid || !id) {
+        setIsSaved(false);
+        return;
+      }
+
+      try {
+        const bookRef = doc(db, "users", uid, "library", id);
+        const bookSnap = await getDoc(bookRef);
+        const isBookSaved = bookSnap.exists();
+        setIsSaved(isBookSaved);
+      } catch (error) {
+        console.error("Error checking if book is saved:", error);
+        setIsSaved(false);
+      }
+    };
+
+    checkIfSaved();
+  }, [uid, id]);
+
+  useEffect(() => {
+    const loadAudioDuration = async () => {
+      if (book?.audioLink) {
+        try {
+          const duration = await getAudioDuration(book.audioLink);
+          setAudioDuration(duration);
+        } catch (error) {
+          console.error("Error loading audio duration:", error);
+          setAudioDuration(null);
+        }
+      }
+    };
+
+    loadAudioDuration();
+  }, [book]);
+
+  const handleToggleSave = async () => {
+    if (!isAuthenticated || !uid) {
+      setShowLoginModal(true);
+      return;
+    }
+
+    if (!book) return;
+
+    const wasAlreadySaved = isSaved;
+    setIsSaved(!wasAlreadySaved);
+
+    try {
+      const bookRef = doc(db, "users", uid, "library", id);
+
+      if (wasAlreadySaved) {
+        await deleteDoc(bookRef);
+      } else {
+        await setDoc(bookRef, {
+          ...book,
+          savedAt: new Date().toISOString(),
+        });
+      }
+    } catch (error) {
+      console.error("Error toggling save:", error);
+      setIsSaved(wasAlreadySaved);
+    }
+  };
+
   const handleSignOut = async () => {
     try {
       await signOut(auth);
       dispatch(clearUser());
-      console.log("User signed out");
     } catch (error) {
       console.error("Error signing out:", error.message);
     }
@@ -130,7 +201,9 @@ function BookDetail() {
                     </div>
                     <div className="book-detail-stat">
                       <FiMic className="book-detail-stat__icon" />
-                      <span className="book-detail-stat__text">Audio & Text</span>
+                      <span className="book-detail-stat__text">
+                        Audio & Text
+                      </span>
                     </div>
                   </div>
 
@@ -139,7 +212,7 @@ function BookDetail() {
                       <BiTime className="book-detail-stat__icon" />
                       <span className="book-detail-stat__text">
                         {book.audioLink
-                          ? `${Math.floor(book.totalRating)} min`
+                          ? formatDuration(audioDuration)
                           : "N/A"}
                       </span>
                     </div>
@@ -153,6 +226,47 @@ function BookDetail() {
                 </div>
 
                 <div className="book-detail-header__divider"></div>
+
+                <div className="book-detail-header__buttons">
+                  <Link
+                    to={
+                      book.subscriptionRequired && !isSubscribed
+                        ? "/choose-plan"
+                        : `/player/${id}`
+                    }
+                    className="book-detail-header__btn book-detail-header__btn--primary"
+                  >
+                    Read
+                  </Link>
+                  <Link
+                    to={
+                      book.subscriptionRequired && !isSubscribed
+                        ? "/choose-plan"
+                        : `/player/${id}`
+                    }
+                    className="book-detail-header__btn book-detail-header__btn--secondary"
+                  >
+                    Listen
+                  </Link>
+                </div>
+
+                <div
+                  className={`book-detail-header__save ${
+                    isSaved ? "book-detail-header__save--active" : ""
+                  }`}
+                  onClick={handleToggleSave}
+                >
+                  {isSaved ? (
+                    <BsBookmarkFill className="book-detail-header__save-icon" />
+                  ) : (
+                    <BsBookmark className="book-detail-header__save-icon" />
+                  )}
+                  <span className="book-detail-header__save-text">
+                    {isSaved
+                      ? "Saved in My Library"
+                      : "Add title to My Library"}
+                  </span>
+                </div>
               </div>
 
               <div className="book-detail-header__image-wrapper">
