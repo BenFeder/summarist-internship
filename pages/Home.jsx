@@ -21,7 +21,7 @@ function Home() {
       <nav className="nav">
         <div className="nav__wrapper">
           <figure className="nav__img--mask">
-            <img className="nav__img" src="./assets/logo.png" alt="logo" />
+            <img className="nav__img" src="../assets/logo.png" alt="logo" />
           </figure>
           <ul className="nav__list--wrapper">
             <li className="nav__list nav__list--login" onClick={openLoginModal}>
