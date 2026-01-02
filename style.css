@@ -640,7 +640,7 @@ button:disabled {
     width: 80%;
     max-width: 300px;
     margin-right: 0;
-    z-index: 999;
+    z-index: 1150;
     transition: left 0.3s ease-in-out;
     overflow-y: auto;
   }
@@ -694,18 +694,19 @@ button:disabled {
     position: fixed;
     top: 16px;
     left: 12px;
-    right: 12px;
+    right: 68px;
     display: flex;
     align-items: center;
     gap: 12px;
-    z-index: 1100;
+    z-index: 100;
   }
 
   /* Hamburger menu */
   .hamburger-menu {
-    position: static !important;
-    flex-shrink: 0;
-    margin-left: auto;
+    position: fixed !important;
+    top: 16px !important;
+    right: 12px !important;
+    z-index: 1100 !important;
   }
 
   /* Search bar container */
@@ -714,8 +715,8 @@ button:disabled {
     top: 0;
     left: 0;
     right: 0;
-    width: 80% !important;
-    flex: 0 0 80%;
+    width: 100% !important;
+    flex: 1;
   }
 
   .search-bar-container::after {
