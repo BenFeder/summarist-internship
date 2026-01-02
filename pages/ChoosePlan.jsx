@@ -92,7 +92,7 @@ function ChoosePlan() {
           Turn ordinary moments into amazing learning opportunities
         </p>
         <img
-          src="../assets/pricing-top.png"
+          src="/assets/pricing-top.png"
           alt="Pricing"
           className="choose-plan-hero__image"
         />
