@@ -6,19 +6,15 @@ import {
   AiOutlineHome,
   AiOutlineSearch,
   AiOutlineQuestionCircle,
-  AiOutlineStar,
-  AiOutlineBulb,
 } from "react-icons/ai";
 import { BsBookmark, BsHighlights } from "react-icons/bs";
-import { FiSettings, FiLogIn, FiLogOut, FiMic } from "react-icons/fi";
-import { BiTime } from "react-icons/bi";
-import { IoBookOutline } from "react-icons/io5";
+import { FiSettings, FiLogIn, FiLogOut } from "react-icons/fi";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase-config";
 import { clearUser } from "../redux/userSlice";
 import Modal from "../components/modal";
 
-function BookDetail() {
+function Player() {
   const { id } = useParams();
   const dispatch = useDispatch();
   const { isAuthenticated } = useSelector((state) => state.user);
@@ -57,7 +53,7 @@ function BookDetail() {
   };
 
   return (
-    <div className="book-detail-page">
+    <div className="player-page">
       <aside className="sidebar">
         <div className="sidebar__top">
           <div className="sidebar__logo">
@@ -108,82 +104,23 @@ function BookDetail() {
         </div>
       </aside>
 
-      <main className="book-detail-content">
+      <main className="player-content">
         {loading ? (
-          <div className="book-detail-loading">Loading...</div>
+          <div className="player-loading">Loading...</div>
         ) : book ? (
-          <>
-            <div className="book-detail-header">
-              <div className="book-detail-header__info">
-                <h1 className="book-detail-header__title">{book.title}</h1>
-                <p className="book-detail-header__author">{book.author}</p>
-                <p className="book-detail-header__subtitle">{book.subTitle}</p>
-
-                <div className="book-detail-header__divider"></div>
-
-                <div className="book-detail-header__stats">
-                  <div className="book-detail-header__stats-left">
-                    <div className="book-detail-stat">
-                      <AiOutlineStar className="book-detail-stat__icon" />
-                      <span className="book-detail-stat__text">
-                        {book.averageRating || "N/A"} ({book.totalRating || 0})
-                      </span>
-                    </div>
-                    <div className="book-detail-stat">
-                      <FiMic className="book-detail-stat__icon" />
-                      <span className="book-detail-stat__text">Audio & Text</span>
-                    </div>
-                  </div>
-
-                  <div className="book-detail-header__stats-right">
-                    <div className="book-detail-stat">
-                      <BiTime className="book-detail-stat__icon" />
-                      <span className="book-detail-stat__text">
-                        {book.audioLink
-                          ? `${Math.floor(book.totalRating)} min`
-                          : "N/A"}
-                      </span>
-                    </div>
-                    <div className="book-detail-stat">
-                      <AiOutlineBulb className="book-detail-stat__icon" />
-                      <span className="book-detail-stat__text">
-                        {book.keyIdeas || 0} Key Ideas
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="book-detail-header__divider"></div>
-
-                <div className="book-detail-actions">
-                  <Link
-                    to={`/player/${id}`}
-                    className="book-detail-action book-detail-action--read"
-                  >
-                    <IoBookOutline className="book-detail-action__icon" />
-                    <span className="book-detail-action__text">Read</span>
-                  </Link>
-                  <Link
-                    to={`/player/${id}`}
-                    className="book-detail-action book-detail-action--listen"
-                  >
-                    <FiMic className="book-detail-action__icon" />
-                    <span className="book-detail-action__text">Listen</span>
-                  </Link>
-                </div>
-              </div>
-
-              <div className="book-detail-header__image-wrapper">
-                <img
-                  src={book.imageLink}
-                  alt={book.title}
-                  className="book-detail-header__image"
-                />
-              </div>
-            </div>
-          </>
+          <div className="player-container">
+            <h1 className="player-title">{book.title}</h1>
+            <div className="player-divider"></div>
+            <div className="player-summary">{book.summary}</div>
+            {book.audioLink && (
+              <audio controls className="player-audio">
+                <source src={book.audioLink} type="audio/mpeg" />
+                Your browser does not support the audio element.
+              </audio>
+            )}
+          </div>
         ) : (
-          <div className="book-detail-error">Book not found</div>
+          <div className="player-error">Book not found</div>
         )}
       </main>
 
@@ -192,4 +129,4 @@ function BookDetail() {
   );
 }
 
-export default BookDetail;
+export default Player;

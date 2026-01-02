@@ -7,6 +7,7 @@ import { setUser, clearUser } from "./redux/userSlice";
 import Home from "./pages/Home";
 import ForYou from "./pages/ForYou";
 import BookDetail from "./pages/BookDetail";
+import Player from "./pages/Player";
 import "./style.css";
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
       <Route path="/" element={<Home />} />
       <Route path="/for-you" element={<ForYou />} />
       <Route path="/book/:id" element={<BookDetail />} />
+      <Route path="/player/:id" element={<Player />} />
     </Routes>
   );
 }
