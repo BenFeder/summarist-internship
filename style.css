@@ -669,6 +669,8 @@ button:disabled {
     padding: 80px 20px 20px 20px !important;
     padding-right: 20px !important;
     width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
     display: flex;
     flex-wrap: wrap;
   }
@@ -794,14 +796,44 @@ button:disabled {
   }
 
   /* Recommended and suggested sections */
+  .recommended-section,
+  .suggested-section {
+    width: 100%;
+    overflow: hidden;
+  }
+
   .recommended-section__title,
   .suggested-section__title,
   .library-section__title {
     font-size: 20px;
   }
 
+  .recommended-books,
+  .suggested-books {
+    overflow: hidden;
+    width: 100%;
+    max-width: 100%;
+  }
+
   .recommended-books__slider,
-  .suggested-books__slider,
+  .suggested-books__slider {
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    gap: 16px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    touch-action: pan-x;
+  }
+
+  .recommended-books__slider::-webkit-scrollbar,
+  .suggested-books__slider::-webkit-scrollbar {
+    display: none;
+  }
+
   .library-books__grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
@@ -809,7 +841,13 @@ button:disabled {
   }
 
   .recommended-book,
-  .suggested-book,
+  .suggested-book {
+    min-width: 140px;
+    max-width: 140px;
+    flex-shrink: 0;
+    scroll-snap-align: start;
+  }
+
   .library-book {
     width: 100%;
   }
@@ -1131,11 +1169,43 @@ button:disabled {
     font-size: 12px;
   }
 
+  .recommended-books,
+  .suggested-books {
+    overflow: hidden;
+    width: 100%;
+    max-width: 100%;
+  }
+
   .recommended-books__slider,
-  .suggested-books__slider,
+  .suggested-books__slider {
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    gap: 12px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    touch-action: pan-x;
+  }
+
+  .recommended-books__slider::-webkit-scrollbar,
+  .suggested-books__slider::-webkit-scrollbar {
+    display: none;
+  }
+
   .library-books__grid {
     grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
     gap: 12px;
+  }
+
+  .recommended-book,
+  .suggested-book {
+    min-width: 120px;
+    max-width: 120px;
+    flex-shrink: 0;
+    scroll-snap-align: start;
   }
 
   .recommended-book__image,
