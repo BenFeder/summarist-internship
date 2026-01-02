@@ -35,7 +35,7 @@ function Sidebar() {
       <aside className="sidebar">
         <div className="sidebar__top">
           <div className="sidebar__logo">
-            <img src="/assets/logo.png" alt="logo" />
+            <img src="../assets/logo.png" alt="logo" />
           </div>
           <nav className="sidebar__nav">
             <Link
