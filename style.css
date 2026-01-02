@@ -734,6 +734,34 @@ button:disabled {
   border-radius: 4px;
 }
 
+.modal__success {
+  color: #28a745;
+  font-size: 14px;
+  margin: 24px 24px 12px 24px;
+  padding: 8px;
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  border-radius: 4px;
+}
+
+.modal__forgot-password {
+  text-align: center;
+  color: #3a7bbd;
+  font-size: 14px;
+  margin: 12px 24px;
+  cursor: pointer;
+  transition: color 200ms;
+}
+
+.modal__forgot-password:hover {
+  color: #2d5f92;
+  text-decoration: underline;
+}
+
+.modal__input--reset {
+  margin: 24px 24px 12px 24px;
+}
+
 /* FOR YOU PAGE */
 .for-you-page {
   display: flex;
