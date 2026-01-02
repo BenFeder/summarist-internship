@@ -2,7 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import { AiOutlineSearch, AiOutlineStar, AiOutlineBulb, AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
+import {
+  AiOutlineSearch,
+  AiOutlineStar,
+  AiOutlineBulb,
+  AiOutlineMenu,
+  AiOutlineClose,
+} from "react-icons/ai";
 import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
 import { FiMic, FiPlay } from "react-icons/fi";
 import { BiTime } from "react-icons/bi";
@@ -204,20 +210,24 @@ function BookDetail() {
       <Sidebar isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
 
       <main className="book-detail-content">
-        <button className="hamburger-menu" onClick={toggleSidebar}>
-          {isSidebarOpen ? <AiOutlineClose /> : <AiOutlineMenu />}
-        </button>
-        <div className="search-bar-container">
-          <div className="search-bar">
-            <input
-              type="text"
-              className="search-bar__input"
-              placeholder="Search for books"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-            <div className="search-bar__divider"></div>
-            <AiOutlineSearch className="search-bar__icon" />
+        <div className="fixed-header">
+          <div className="mobile-header-wrapper">
+            <button className="hamburger-menu" onClick={toggleSidebar}>
+              {isSidebarOpen ? <AiOutlineClose /> : <AiOutlineMenu />}
+            </button>
+            <div className="search-bar-container">
+              <div className="search-bar">
+                <input
+                  type="text"
+                  className="search-bar__input"
+                  placeholder="Search for books"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+                <div className="search-bar__divider"></div>
+                <AiOutlineSearch className="search-bar__icon" />
+              </div>
+            </div>
           </div>
           {searchQuery.trim() !== "" && searchResults.length === 0 && (
             <div className="search-results">

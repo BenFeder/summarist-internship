@@ -151,58 +151,60 @@ function Settings() {
       <Sidebar isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
 
       <main className="settings-content">
-        <div className="mobile-header-wrapper">
-          <button className="hamburger-menu" onClick={toggleSidebar}>
-            {isSidebarOpen ? <AiOutlineClose /> : <AiOutlineMenu />}
-          </button>
-          <div className="search-bar-container">
-            <div className="search-bar">
-              <input
-                type="text"
-                className="search-bar__input"
-                placeholder="Search for books"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-              <div className="search-bar__divider"></div>
-              <AiOutlineSearch className="search-bar__icon" />
+        <div className="fixed-header">
+          <div className="mobile-header-wrapper">
+            <button className="hamburger-menu" onClick={toggleSidebar}>
+              {isSidebarOpen ? <AiOutlineClose /> : <AiOutlineMenu />}
+            </button>
+            <div className="search-bar-container">
+              <div className="search-bar">
+                <input
+                  type="text"
+                  className="search-bar__input"
+                  placeholder="Search for books"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+                <div className="search-bar__divider"></div>
+                <AiOutlineSearch className="search-bar__icon" />
+              </div>
             </div>
-            {searchQuery.trim() !== "" && searchResults.length === 0 && (
-              <div className="search-results">
-                <div className="search-no-results">No books found</div>
-              </div>
-            )}
-            {searchResults.length > 0 && (
-              <div className="search-results">
-                {searchResults.map((book) => (
-                  <Link
-                    key={book.id}
-                    to={`/book/${book.id}`}
-                    className="search-result"
-                    onClick={() => setSearchQuery("")}
-                  >
-                    <img
-                      src={book.imageLink}
-                      alt={book.title}
-                      className="search-result__image"
-                    />
-                    <div className="search-result__info">
-                      <h4 className="search-result__title">{book.title}</h4>
-                      <p className="search-result__author">{book.author}</p>
-                      <div className="search-result__duration">
-                        <FiPlay className="search-result__play-icon" />
-                        <span>
-                          {book.audioLink
-                            ? formatDuration(audioDurations[book.id])
-                            : "N/A"}
-                        </span>
-                      </div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            )}
           </div>
+          {searchQuery.trim() !== "" && searchResults.length === 0 && (
+            <div className="search-results">
+              <div className="search-no-results">No books found</div>
+            </div>
+          )}
+          {searchResults.length > 0 && (
+            <div className="search-results">
+              {searchResults.map((book) => (
+                <Link
+                  key={book.id}
+                  to={`/book/${book.id}`}
+                  className="search-result"
+                  onClick={() => setSearchQuery("")}
+                >
+                  <img
+                    src={book.imageLink}
+                    alt={book.title}
+                    className="search-result__image"
+                  />
+                  <div className="search-result__info">
+                    <h4 className="search-result__title">{book.title}</h4>
+                    <p className="search-result__author">{book.author}</p>
+                    <div className="search-result__duration">
+                      <FiPlay className="search-result__play-icon" />
+                      <span>
+                        {book.audioLink
+                          ? formatDuration(audioDurations[book.id])
+                          : "N/A"}
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
         </div>
         <div className="settings-container">
           <h1 className="settings-title">Settings</h1>

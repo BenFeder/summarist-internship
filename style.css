@@ -673,7 +673,18 @@ button:disabled {
     flex-wrap: wrap;
   }
 
-  /* Mobile header wrapper */
+  /* Hide fixed header on mobile, use mobile-header-wrapper instead */
+  .fixed-header {
+    position: static;
+    padding: 0;
+    background-color: transparent;
+  }
+
+  .fixed-header::after {
+    display: none;
+  }
+
+  /* Mobile header background */
   .for-you-content::before,
   .library-content::before,
   .settings-content::before,
@@ -718,6 +729,7 @@ button:disabled {
     right: 0;
     width: 100% !important;
     flex: 1;
+    margin-left: 0;
   }
 
   .search-bar-container::after {
@@ -743,6 +755,16 @@ button:disabled {
   .search-bar__icon {
     font-size: 18px;
     margin-right: 10px;
+  }
+
+  /* Search results on mobile */
+  .search-results {
+    position: fixed;
+    top: 72px;
+    left: 12px;
+    right: 68px;
+    width: auto;
+    z-index: 99;
   }
 
   /* Selected section */
@@ -1029,7 +1051,7 @@ button:disabled {
   .settings-content,
   .book-detail-content,
   .player-content {
-    padding: 70px 16px 16px 16px !important;
+    padding: 80px 16px 16px 16px !important;
   }
 
   .player-content {
@@ -1483,24 +1505,39 @@ button:disabled {
   margin-bottom: 16px;
 }
 
+/* FIXED HEADER */
+.fixed-header {
+  position: fixed;
+  top: 0;
+  left: 200px;
+  right: 0;
+  background-color: white;
+  z-index: 1000;
+  padding: 40px 256px 0 40px;
+}
+
+.fixed-header::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background-color: #e1e7ea;
+}
+
 /* SEARCH BAR */
 .search-bar-container {
-  position: fixed;
-  top: 40px;
-  right: 256px;
+  position: relative;
   width: 400px;
+  margin-left: auto;
   z-index: 100;
   background-color: white;
+  padding-bottom: 8px;
 }
 
 .search-bar-container::after {
-  content: "";
-  position: absolute;
-  left: -9999px;
-  right: -9999px;
-  top: 48px;
-  height: 1px;
-  background-color: #e1e7ea;
+  display: none;
 }
 
 .search-bar {
@@ -1542,7 +1579,11 @@ button:disabled {
 }
 
 .search-results {
-  margin-top: 8px;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 400px;
+  z-index: 99;
   background-color: white;
   border: 1px solid #e1e7ea;
   border-radius: 8px;
