@@ -6,6 +6,7 @@ import { auth } from "./firebase-config";
 import { setUser, clearUser } from "./redux/userSlice";
 import Home from "./pages/Home";
 import ForYou from "./pages/ForYou";
+import BookDetail from "./pages/BookDetail";
 import "./style.css";
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/for-you" element={<ForYou />} />
+      <Route path="/book/:id" element={<BookDetail />} />
     </Routes>
   );
 }
