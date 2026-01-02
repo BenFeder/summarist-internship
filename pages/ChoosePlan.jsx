@@ -198,85 +198,87 @@ function ChoosePlan() {
         ))}
       </div>
 
-      <footer className="choose-plan-footer">
-        <div className="choose-plan-footer__content">
-          <div className="choose-plan-footer__columns">
-            <div className="footer-column">
-              <h4 className="footer-column__heading">Actions</h4>
-              <ul className="footer-column__list">
-                <li>
-                  <a href="#">Summarist Magazine</a>
-                </li>
-                <li>
-                  <a href="#">Cancel Subscription</a>
-                </li>
-                <li>
-                  <a href="#">Help</a>
-                </li>
-                <li>
-                  <a href="#">Contact Us</a>
-                </li>
-              </ul>
+      <section id="footer">
+        <div className="container">
+          <div className="row">
+            <div className="footer__top--wrapper">
+              <div className="footer__block">
+                <div className="footer__link--title">Actions</div>
+                <div>
+                  <div className="footer__link--wrapper">
+                    <a className="footer__link">Summarist Magazine</a>
+                  </div>
+                  <div className="footer__link--wrapper">
+                    <a className="footer__link">Cancel Subscription</a>
+                  </div>
+                  <div className="footer__link--wrapper">
+                    <a className="footer__link">Help</a>
+                  </div>
+                  <div className="footer__link--wrapper">
+                    <a className="footer__link">Contact us</a>
+                  </div>
+                </div>
+              </div>
+              <div className="footer__block">
+                <div className="footer__link--title">Useful Links</div>
+                <div>
+                  <div className="footer__link--wrapper">
+                    <a className="footer__link">Pricing</a>
+                  </div>
+                  <div className="footer__link--wrapper">
+                    <a className="footer__link">Summarist Business</a>
+                  </div>
+                  <div className="footer__link--wrapper">
+                    <a className="footer__link">Gift Cards</a>
+                  </div>
+                  <div className="footer__link--wrapper">
+                    <a className="footer__link">Authors & Publishers</a>
+                  </div>
+                </div>
+              </div>
+              <div className="footer__block">
+                <div className="footer__link--title">Company</div>
+                <div>
+                  <div className="footer__link--wrapper">
+                    <a className="footer__link">About</a>
+                  </div>
+                  <div className="footer__link--wrapper">
+                    <a className="footer__link">Careers</a>
+                  </div>
+                  <div className="footer__link--wrapper">
+                    <a className="footer__link">Partners</a>
+                  </div>
+                  <div className="footer__link--wrapper">
+                    <a className="footer__link">Code of Conduct</a>
+                  </div>
+                </div>
+              </div>
+              <div className="footer__block">
+                <div className="footer__link--title">Other</div>
+                <div>
+                  <div className="footer__link--wrapper">
+                    <a className="footer__link">Sitemap</a>
+                  </div>
+                  <div className="footer__link--wrapper">
+                    <a className="footer__link">Legal Notice</a>
+                  </div>
+                  <div className="footer__link--wrapper">
+                    <a className="footer__link">Terms of Service</a>
+                  </div>
+                  <div className="footer__link--wrapper">
+                    <a className="footer__link">Privacy Policies</a>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="footer-column">
-              <h4 className="footer-column__heading">Useful Links</h4>
-              <ul className="footer-column__list">
-                <li>
-                  <a href="#">Pricing</a>
-                </li>
-                <li>
-                  <a href="#">Summarist Business</a>
-                </li>
-                <li>
-                  <a href="#">Gift Cards</a>
-                </li>
-                <li>
-                  <a href="#">Authors & Publishers</a>
-                </li>
-              </ul>
+            <div className="footer__copyright--wrapper">
+              <div className="footer__copyright">
+                Copyright &copy; 2023 Summarist.
+              </div>
             </div>
-            <div className="footer-column">
-              <h4 className="footer-column__heading">Company</h4>
-              <ul className="footer-column__list">
-                <li>
-                  <a href="#">About</a>
-                </li>
-                <li>
-                  <a href="#">Careers</a>
-                </li>
-                <li>
-                  <a href="#">Partners</a>
-                </li>
-                <li>
-                  <a href="#">Code of Conduct</a>
-                </li>
-              </ul>
-            </div>
-            <div className="footer-column">
-              <h4 className="footer-column__heading">Other</h4>
-              <ul className="footer-column__list">
-                <li>
-                  <a href="#">Sitemap</a>
-                </li>
-                <li>
-                  <a href="#">Legal Notice</a>
-                </li>
-                <li>
-                  <a href="#">Terms of Service</a>
-                </li>
-                <li>
-                  <a href="#">Privacy Policy</a>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div className="choose-plan-footer__copyright">
-            <p>
-              <strong>Copyright © 2025 Summarist.</strong>
-            </p>
           </div>
         </div>
-      </footer>
+      </section>
     </div>
   );
 }
