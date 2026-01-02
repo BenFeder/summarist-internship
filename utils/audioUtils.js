@@ -31,3 +31,14 @@ export const formatDuration = (seconds) => {
   const remainingSeconds = Math.floor(seconds % 60);
   return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
 };
+
+// Format seconds into "X mins Y secs" format for selected book section
+export const formatDurationVerbose = (seconds) => {
+  if (!seconds || isNaN(seconds)) {
+    return "N/A";
+  }
+
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = Math.floor(seconds % 60);
+  return `${minutes} mins ${remainingSeconds} secs`;
+};

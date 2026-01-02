@@ -4,7 +4,11 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import { AiOutlineSearch, AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import { FiPlay, FiStar, FiClock } from "react-icons/fi";
-import { getAudioDuration, formatDuration } from "../utils/audioUtils";
+import {
+  getAudioDuration,
+  formatDuration,
+  formatDurationVerbose,
+} from "../utils/audioUtils";
 import Sidebar from "../components/Sidebar";
 import { BookRowSkeleton } from "../components/BookSkeleton";
 
@@ -246,7 +250,7 @@ function ForYou() {
                     <FiClock className="selected-book__play-icon" />
                     <span className="selected-book__duration">
                       {selectedBook.audioLink
-                        ? formatDuration(audioDurations[selectedBook.id])
+                        ? formatDurationVerbose(audioDurations[selectedBook.id])
                         : "N/A"}
                     </span>
                   </div>
