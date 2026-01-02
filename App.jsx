@@ -9,6 +9,7 @@ import ForYou from "./pages/ForYou";
 import BookDetail from "./pages/BookDetail";
 import Library from "./pages/Library";
 import Player from "./pages/Player";
+import Settings from "./pages/Settings";
 import "./style.css";
 
 function App() {
@@ -38,6 +39,7 @@ function App() {
       <Route path="/book/:id" element={<BookDetail />} />
       <Route path="/library" element={<Library />} />
       <Route path="/player/:id" element={<Player />} />
+      <Route path="/settings" element={<Settings />} />
     </Routes>
   );
 }

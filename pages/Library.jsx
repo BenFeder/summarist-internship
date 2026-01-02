@@ -1,30 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import {
-  AiOutlineHome,
-  AiOutlineSearch,
-  AiOutlineQuestionCircle,
-} from "react-icons/ai";
-import { BsBookmark, BsHighlights } from "react-icons/bs";
-import { FiSettings, FiLogIn, FiLogOut, FiPlay, FiStar } from "react-icons/fi";
-import { signOut } from "firebase/auth";
-import { auth, db } from "../firebase-config";
+import { useSelector } from "react-redux";
+import axios from "axios";
+import { AiOutlineSearch } from "react-icons/ai";
+import { FiPlay, FiStar } from "react-icons/fi";
+import { db } from "../firebase-config";
 import { collection, getDocs } from "firebase/firestore";
-import { clearUser } from "../redux/userSlice";
-import Modal from "../components/modal";
 import { getAudioDuration, formatDuration } from "../utils/audioUtils";
+import Sidebar from "../components/Sidebar";
 
 function Library() {
-  const dispatch = useDispatch();
-  const { isAuthenticated, user } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.user);
   const uid = user?.uid;
-  const [showLoginModal, setShowLoginModal] = useState(false);
   const [savedBooks, setSavedBooks] = useState([]);
   const [finishedBooks, setFinishedBooks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refetchTrigger, setRefetchTrigger] = useState(0);
   const [audioDurations, setAudioDurations] = useState({});
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [allBooks, setAllBooks] = useState([]);
 
   // Expose a way to manually trigger refetch
   useEffect(() => {
@@ -99,69 +94,108 @@ function Library() {
     }
   }, [savedBooks, finishedBooks]);
 
-  const handleSignOut = async () => {
-    try {
-      await signOut(auth);
-      dispatch(clearUser());
-      console.log("User signed out");
-    } catch (error) {
-      console.error("Error signing out:", error.message);
+  useEffect(() => {
+    const fetchAllBooks = async () => {
+      try {
+        const [selectedRes, recommendedRes, suggestedRes] = await Promise.all([
+          axios.get(
+            "https://us-central1-summaristt.cloudfunctions.net/getBooks?status=selected"
+          ),
+          axios.get(
+            "https://us-central1-summaristt.cloudfunctions.net/getBooks?status=recommended"
+          ),
+          axios.get(
+            "https://us-central1-summaristt.cloudfunctions.net/getBooks?status=suggested"
+          ),
+        ]);
+        const books = [
+          ...(selectedRes.data || []),
+          ...(recommendedRes.data || []),
+          ...(suggestedRes.data || []),
+        ];
+        const uniqueBooks = books.filter(
+          (book, index, self) =>
+            index === self.findIndex((b) => b.id === book.id)
+        );
+        setAllBooks(uniqueBooks);
+      } catch (error) {
+        console.error("Error fetching books:", error);
+      }
+    };
+    fetchAllBooks();
+  }, []);
+
+  useEffect(() => {
+    if (searchQuery.trim() === "") {
+      setSearchResults([]);
+      return;
     }
-  };
+    const query = searchQuery.toLowerCase();
+    const filtered = allBooks.filter((book) => {
+      return (
+        book.title.toLowerCase().includes(query) ||
+        book.author.toLowerCase().includes(query)
+      );
+    });
+    const uniqueFiltered = filtered.filter(
+      (book, index, self) => index === self.findIndex((b) => b.id === book.id)
+    );
+    setSearchResults(uniqueFiltered);
+  }, [searchQuery, allBooks]);
 
   return (
     <div className="library-page">
-      <aside className="sidebar">
-        <div className="sidebar__top">
-          <div className="sidebar__logo">
-            <img src="/assets/logo.png" alt="logo" />
+      <Sidebar />
+
+      <main className="library-content">
+        <div className="search-bar-container">
+          <div className="search-bar">
+            <input
+              type="text"
+              className="search-bar__input"
+              placeholder="Search for books"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            <div className="search-bar__divider"></div>
+            <AiOutlineSearch className="search-bar__icon" />
           </div>
-          <nav className="sidebar__nav">
-            <Link to="/for-you" className="sidebar__link">
-              <AiOutlineHome className="sidebar__icon" />
-              <span>For You</span>
-            </Link>
-            <Link to="/library" className="sidebar__link sidebar__link--active">
-              <BsBookmark className="sidebar__icon" />
-              <span>My Library</span>
-            </Link>
-            <div className="sidebar__link sidebar__link--disabled">
-              <BsHighlights className="sidebar__icon" />
-              <span>Highlights</span>
+          {searchQuery.trim() !== "" && searchResults.length === 0 && (
+            <div className="search-results">
+              <div className="search-no-results">No books found</div>
             </div>
-            <div className="sidebar__link sidebar__link--disabled">
-              <AiOutlineSearch className="sidebar__icon" />
-              <span>Search</span>
-            </div>
-          </nav>
-        </div>
-        <div className="sidebar__bottom">
-          <Link to="/settings" className="sidebar__link">
-            <FiSettings className="sidebar__icon" />
-            <span>Settings</span>
-          </Link>
-          <div className="sidebar__link sidebar__link--disabled">
-            <AiOutlineQuestionCircle className="sidebar__icon" />
-            <span>Help & Support</span>
-          </div>
-          {isAuthenticated ? (
-            <div className="sidebar__link" onClick={handleSignOut}>
-              <FiLogOut className="sidebar__icon" />
-              <span>Logout</span>
-            </div>
-          ) : (
-            <div
-              className="sidebar__link"
-              onClick={() => setShowLoginModal(true)}
-            >
-              <FiLogIn className="sidebar__icon" />
-              <span>Login</span>
+          )}
+          {searchResults.length > 0 && (
+            <div className="search-results">
+              {searchResults.map((book) => (
+                <Link
+                  key={book.id}
+                  to={`/book/${book.id}`}
+                  className="search-result"
+                  onClick={() => setSearchQuery("")}
+                >
+                  <img
+                    src={book.imageLink}
+                    alt={book.title}
+                    className="search-result__image"
+                  />
+                  <div className="search-result__info">
+                    <h4 className="search-result__title">{book.title}</h4>
+                    <p className="search-result__author">{book.author}</p>
+                    <div className="search-result__duration">
+                      <FiPlay className="search-result__play-icon" />
+                      <span>
+                        {book.audioLink
+                          ? formatDuration(audioDurations[book.id])
+                          : "N/A"}
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              ))}
             </div>
           )}
         </div>
-      </aside>
-
-      <main className="library-content">
         <div className="library-section">
           <h2 className="library-section__title">Saved Books</h2>
           <p className="library-section__count">
@@ -284,8 +318,6 @@ function Library() {
           )}
         </div>
       </main>
-
-      <Modal show={showLoginModal} onClose={() => setShowLoginModal(false)} />
     </div>
   );
 }
