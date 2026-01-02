@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import { AiOutlineSearch, AiOutlineStar, AiOutlineBulb } from "react-icons/ai";
+import { AiOutlineSearch, AiOutlineStar, AiOutlineBulb, AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
 import { FiMic, FiPlay } from "react-icons/fi";
 import { BiTime } from "react-icons/bi";
@@ -26,6 +26,11 @@ function BookDetail() {
   const [searchResults, setSearchResults] = useState([]);
   const [allBooks, setAllBooks] = useState([]);
   const [audioDurations, setAudioDurations] = useState({});
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
 
   useEffect(() => {
     const fetchBook = async () => {
@@ -196,9 +201,12 @@ function BookDetail() {
 
   return (
     <div className="book-detail-page">
-      <Sidebar />
+      <Sidebar isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
 
       <main className="book-detail-content">
+        <button className="hamburger-menu" onClick={toggleSidebar}>
+          {isSidebarOpen ? <AiOutlineClose /> : <AiOutlineMenu />}
+        </button>
         <div className="search-bar-container">
           <div className="search-bar">
             <input

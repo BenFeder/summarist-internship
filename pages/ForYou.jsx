@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import { AiOutlineSearch } from "react-icons/ai";
+import { AiOutlineSearch, AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import { FiPlay, FiStar, FiClock } from "react-icons/fi";
 import { getAudioDuration, formatDuration } from "../utils/audioUtils";
 import Sidebar from "../components/Sidebar";
@@ -20,6 +20,11 @@ function ForYou() {
   const [loadingSelected, setLoadingSelected] = useState(true);
   const [loadingRecommended, setLoadingRecommended] = useState(true);
   const [loadingSuggested, setLoadingSuggested] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
 
   useEffect(() => {
     const fetchSelectedBook = async () => {
@@ -152,8 +157,11 @@ function ForYou() {
 
   return (
     <div className="for-you-page">
-      <Sidebar />
+      <Sidebar isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
       <main className="for-you-content">
+        <button className="hamburger-menu" onClick={toggleSidebar}>
+          {isSidebarOpen ? <AiOutlineClose /> : <AiOutlineMenu />}
+        </button>
         <div className="search-bar-container">
           <div className="search-bar">
             <input

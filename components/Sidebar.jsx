@@ -5,6 +5,8 @@ import {
   AiOutlineHome,
   AiOutlineSearch,
   AiOutlineQuestionCircle,
+  AiOutlineMenu,
+  AiOutlineClose,
 } from "react-icons/ai";
 import { BsBookmark } from "react-icons/bs";
 import { FiSettings, FiLogIn, FiLogOut, FiEdit } from "react-icons/fi";
@@ -13,7 +15,7 @@ import { auth } from "../firebase-config";
 import { clearUser } from "../redux/userSlice";
 import Modal from "./modal";
 
-function Sidebar() {
+function Sidebar({ isSidebarOpen, toggleSidebar }) {
   const location = useLocation();
   const dispatch = useDispatch();
   const { isAuthenticated } = useSelector((state) => state.user);
@@ -30,9 +32,21 @@ function Sidebar() {
 
   const isActive = (path) => location.pathname === path;
 
+  const handleLinkClick = () => {
+    // Close sidebar on mobile after clicking a link
+    if (window.innerWidth <= 768 && toggleSidebar) {
+      toggleSidebar();
+    }
+  };
+
   return (
     <>
-      <aside className="sidebar">
+      {/* Overlay for mobile */}
+      {isSidebarOpen && (
+        <div className="sidebar__overlay" onClick={toggleSidebar}></div>
+      )}
+
+      <aside className={`sidebar ${isSidebarOpen ? "sidebar--open" : ""}`}>
         <div className="sidebar__top">
           <div className="sidebar__logo">
             <img src="../assets/logo.png" alt="logo" />
@@ -43,6 +57,7 @@ function Sidebar() {
               className={`sidebar__link ${
                 isActive("/for-you") ? "sidebar__link--active" : ""
               }`}
+              onClick={handleLinkClick}
             >
               <AiOutlineHome className="sidebar__icon" />
               <span>For You</span>
@@ -52,6 +67,7 @@ function Sidebar() {
               className={`sidebar__link ${
                 isActive("/library") ? "sidebar__link--active" : ""
               }`}
+              onClick={handleLinkClick}
             >
               <BsBookmark className="sidebar__icon" />
               <span>My Library</span>
@@ -72,6 +88,7 @@ function Sidebar() {
             className={`sidebar__link ${
               isActive("/settings") ? "sidebar__link--active" : ""
             }`}
+            onClick={handleLinkClick}
           >
             <FiSettings className="sidebar__icon" />
             <span>Settings</span>
@@ -81,14 +98,23 @@ function Sidebar() {
             <span>Help & Support</span>
           </div>
           {isAuthenticated ? (
-            <div className="sidebar__link" onClick={handleSignOut}>
+            <div
+              className="sidebar__link"
+              onClick={() => {
+                handleSignOut();
+                handleLinkClick();
+              }}
+            >
               <FiLogOut className="sidebar__icon" />
               <span>Logout</span>
             </div>
           ) : (
             <div
               className="sidebar__link"
-              onClick={() => setShowLoginModal(true)}
+              onClick={() => {
+                setShowLoginModal(true);
+                handleLinkClick();
+              }}
             >
               <FiLogIn className="sidebar__icon" />
               <span>Login</span>

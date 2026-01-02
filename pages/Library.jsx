@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import { AiOutlineSearch } from "react-icons/ai";
+import { AiOutlineSearch, AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import { FiPlay, FiStar } from "react-icons/fi";
 import { db } from "../firebase-config";
 import { collection, getDocs } from "firebase/firestore";
@@ -21,6 +21,11 @@ function Library() {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [allBooks, setAllBooks] = useState([]);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
 
   // Expose a way to manually trigger refetch
   useEffect(() => {
@@ -157,9 +162,12 @@ function Library() {
 
   return (
     <div className="library-page">
-      <Sidebar />
+      <Sidebar isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
 
       <main className="library-content">
+        <button className="hamburger-menu" onClick={toggleSidebar}>
+          {isSidebarOpen ? <AiOutlineClose /> : <AiOutlineMenu />}
+        </button>
         <div className="search-bar-container">
           <div className="search-bar">
             <input

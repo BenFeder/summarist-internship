@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import { AiOutlineSearch } from "react-icons/ai";
+import { AiOutlineSearch, AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import { FiPlay } from "react-icons/fi";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../firebase-config";
@@ -16,6 +16,11 @@ function Settings() {
   const [searchResults, setSearchResults] = useState([]);
   const [allBooks, setAllBooks] = useState([]);
   const [audioDurations, setAudioDurations] = useState({});
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
 
   const isSubscribed = user?.isSubscribed || false;
   const userEmail = user?.email || "";
@@ -143,9 +148,12 @@ function Settings() {
 
   return (
     <div className="settings-page">
-      <Sidebar />
+      <Sidebar isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
 
       <main className="settings-content">
+        <button className="hamburger-menu" onClick={toggleSidebar}>
+          {isSidebarOpen ? <AiOutlineClose /> : <AiOutlineMenu />}
+        </button>
         <div className="search-bar-container">
           <div className="search-bar">
             <input

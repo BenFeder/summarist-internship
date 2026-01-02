@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import { AiOutlineSearch } from "react-icons/ai";
+import { AiOutlineSearch, AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import { FiPlay, FiPause } from "react-icons/fi";
 import { MdReplay10, MdForward10 } from "react-icons/md";
 import { db } from "../firebase-config";
@@ -27,6 +27,11 @@ function Player() {
   const [searchResults, setSearchResults] = useState([]);
   const [allBooks, setAllBooks] = useState([]);
   const [audioDurations, setAudioDurations] = useState({});
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
 
   useEffect(() => {
     const fetchBook = async () => {
@@ -222,9 +227,12 @@ function Player() {
 
   return (
     <div className="player-page">
-      <Sidebar />
+      <Sidebar isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
 
       <main className="player-content">
+        <button className="hamburger-menu" onClick={toggleSidebar}>
+          {isSidebarOpen ? <AiOutlineClose /> : <AiOutlineMenu />}
+        </button>
         <div className="search-bar-container">
           <div className="search-bar">
             <input
