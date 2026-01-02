@@ -405,7 +405,8 @@ button:disabled {
 .footer__top--wrapper {
   position: relative;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: space-between;
   gap: 32px;
   font-size: 14px;
   margin: 32px auto 64px;
