@@ -1618,6 +1618,57 @@ button:disabled {
   color: #2bd97c;
 }
 
+.book-detail-tags {
+  margin-top: 32px;
+}
+
+.book-detail-tags__heading {
+  font-size: 18px;
+  font-weight: 600;
+  color: #032b41;
+  margin-bottom: 16px;
+}
+
+.book-detail-tags__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.book-detail-tag {
+  padding: 8px 16px;
+  background-color: #e8e8e8;
+  color: #4a4a4a;
+  font-weight: 700;
+  font-size: 14px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.book-detail-description {
+  margin-top: 24px;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #394547;
+}
+
+.book-detail-author {
+  margin-top: 24px;
+}
+
+.book-detail-author__heading {
+  font-size: 18px;
+  font-weight: 600;
+  color: #032b41;
+  margin-bottom: 16px;
+}
+
+.book-detail-author__description {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #394547;
+}
+
 /* Library Page */
 .library-page {
   display: flex;

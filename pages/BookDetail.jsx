@@ -266,6 +266,38 @@ function BookDetail() {
                       : "Add title to My Library"}
                   </span>
                 </div>
+
+                {book.tags && book.tags.length > 0 && (
+                  <div className="book-detail-tags">
+                    <h3 className="book-detail-tags__heading">
+                      What's it about?
+                    </h3>
+                    <div className="book-detail-tags__list">
+                      {book.tags.map((tag, index) => (
+                        <div key={index} className="book-detail-tag">
+                          {tag}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {book.bookDescription && (
+                  <p className="book-detail-description">
+                    {book.bookDescription}
+                  </p>
+                )}
+
+                {book.authorDescription && (
+                  <div className="book-detail-author">
+                    <h3 className="book-detail-author__heading">
+                      About the Author
+                    </h3>
+                    <p className="book-detail-author__description">
+                      {book.authorDescription}
+                    </p>
+                  </div>
+                )}
               </div>
 
               <div className="book-detail-header__image-wrapper">
