@@ -91,6 +91,11 @@ function ChoosePlan() {
         <p className="choose-plan-hero__subtitle">
           Turn ordinary moments into amazing learning opportunities
         </p>
+        <img
+          src="../assets/pricing-top.png"
+          alt="Pricing"
+          className="choose-plan-hero__image"
+        />
       </div>
 
       <div className="choose-plan-features">

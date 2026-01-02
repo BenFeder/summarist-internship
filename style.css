@@ -1158,6 +1158,10 @@ button:disabled {
     font-size: 13px;
   }
 
+  .choose-plan-hero__image {
+    display: none;
+  }
+
   .choose-plan-features {
     gap: 24px;
     padding: 0 16px;
@@ -2778,6 +2782,7 @@ button:disabled {
   align-items: center;
   padding: 0 40px;
   text-align: center;
+  position: relative;
 }
 
 .choose-plan-hero__title {
@@ -2792,7 +2797,19 @@ button:disabled {
 .choose-plan-hero__subtitle {
   font-size: 16px;
   color: #fff;
-  margin: 0;
+  margin: 0 0 152px 0;
+}
+
+.choose-plan-hero__image {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 340px;
+  height: auto;
+  background-color: #5282a5;
+  border-top-left-radius: 50%;
+  border-top-right-radius: 50%;
 }
 
 .choose-plan-features {
