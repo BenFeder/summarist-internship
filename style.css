@@ -777,6 +777,7 @@ button:disabled {
   justify-content: space-between;
   border-right: 1px solid #e1e7ea;
   padding: 24px 0;
+  margin-right: 184px;
 }
 
 .sidebar__logo {
@@ -844,4 +845,113 @@ button:disabled {
 .for-you-content h1 {
   color: #032b41;
   margin-bottom: 16px;
+}
+
+/* SELECTED SECTION */
+.selected-section {
+  margin-bottom: 40px;
+}
+
+.selected-section__title {
+  color: #032b41;
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+
+.selected-book {
+  display: flex;
+  width: calc(30% + 80px);
+  height: calc(22vh - 16px);
+  background-color: #fbefd6;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.selected-book__content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding-right: 12px;
+}
+
+.selected-book__subtitle {
+  color: #032b41;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.selected-book__divider {
+  width: 1px;
+  background-color: #e1e7ea;
+  margin: 0 12px;
+  align-self: stretch;
+  flex-shrink: 0;
+}
+
+.selected-book__details {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 16px;
+  padding-left: 12px;
+}
+
+.selected-book__image {
+  width: auto;
+  height: calc(100% - 32px);
+  object-fit: cover;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.selected-book__info {
+  text-align: right;
+  margin-right: 32px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.selected-book__title {
+  color: #032b41;
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.selected-book__author {
+  color: #6b757b;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.selected-book__audio {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.selected-book__play-icon {
+  width: 32px;
+  height: 32px;
+  background-color: #032b41;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+}
+
+.selected-book__duration {
+  color: #6b757b;
+  font-size: 14px;
 }

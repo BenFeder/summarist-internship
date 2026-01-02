@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import axios from "axios";
 import {
   AiOutlineHome,
   AiOutlineSearch,
   AiOutlineQuestionCircle,
 } from "react-icons/ai";
 import { BsBookmark, BsHighlights } from "react-icons/bs";
-import { FiSettings, FiLogIn, FiLogOut } from "react-icons/fi";
+import { FiSettings, FiLogIn, FiLogOut, FiPlay } from "react-icons/fi";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase-config";
 import { clearUser } from "../redux/userSlice";
@@ -17,6 +18,24 @@ function ForYou() {
   const dispatch = useDispatch();
   const { isAuthenticated } = useSelector((state) => state.user);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [selectedBook, setSelectedBook] = useState(null);
+
+  useEffect(() => {
+    const fetchSelectedBook = async () => {
+      try {
+        const response = await axios.get(
+          "https://us-central1-summaristt.cloudfunctions.net/getBooks?status=selected"
+        );
+        if (response.data && response.data[0]) {
+          setSelectedBook(response.data[0]);
+        }
+      } catch (error) {
+        console.error("Error fetching selected book:", error);
+      }
+    };
+
+    fetchSelectedBook();
+  }, []);
 
   const handleSignOut = async () => {
     try {
@@ -69,7 +88,10 @@ function ForYou() {
               <span>Logout</span>
             </div>
           ) : (
-            <div className="sidebar__link" onClick={() => setShowLoginModal(true)}>
+            <div
+              className="sidebar__link"
+              onClick={() => setShowLoginModal(true)}
+            >
               <FiLogIn className="sidebar__icon" />
               <span>Login</span>
             </div>
@@ -77,10 +99,40 @@ function ForYou() {
         </div>
       </aside>
       <main className="for-you-content">
-        <h1>For You</h1>
-        <p>Welcome to your personalized recommendations!</p>
+        <div className="selected-section">
+          <h2 className="selected-section__title">Selected just for you</h2>
+          {selectedBook ? (
+            <Link to={`/book/${selectedBook.id}`} className="selected-book">
+              <div className="selected-book__content">
+                <p className="selected-book__subtitle">{selectedBook.subTitle}</p>
+              </div>
+              <div className="selected-book__divider"></div>
+              <div className="selected-book__details">
+                <img
+                  src={selectedBook.imageLink}
+                  alt={selectedBook.title}
+                  className="selected-book__image"
+                />
+                <div className="selected-book__info">
+                  <h3 className="selected-book__title">{selectedBook.title}</h3>
+                  <p className="selected-book__author">{selectedBook.author}</p>
+                  <div className="selected-book__audio">
+                    <FiPlay className="selected-book__play-icon" />
+                    <span className="selected-book__duration">
+                      {selectedBook.audioLink ? `${Math.floor(selectedBook.totalRating)} min` : "N/A"}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </Link>
+          ) : (
+            <div className="selected-book selected-book--loading">
+              <p>Loading...</p>
+            </div>
+          )}
+        </div>
       </main>
-      
+
       <Modal show={showLoginModal} onClose={() => setShowLoginModal(false)} />
     </div>
   );
