@@ -8,6 +8,7 @@ import { db } from "../firebase-config";
 import { collection, getDocs } from "firebase/firestore";
 import { getAudioDuration, formatDuration } from "../utils/audioUtils";
 import Sidebar from "../components/Sidebar";
+import { BookRowSkeleton } from "../components/BookSkeleton";
 
 function Library() {
   const { user } = useSelector((state) => state.user);
@@ -130,18 +131,29 @@ function Library() {
       setSearchResults([]);
       return;
     }
-    const query = searchQuery.toLowerCase();
-    const filtered = allBooks.filter((book) => {
-      return (
-        book.title.toLowerCase().includes(query) ||
-        book.author.toLowerCase().includes(query)
-      );
-    });
-    const uniqueFiltered = filtered.filter(
-      (book, index, self) => index === self.findIndex((b) => b.id === book.id)
-    );
-    setSearchResults(uniqueFiltered);
-  }, [searchQuery, allBooks]);
+
+    const fetchSearchResults = async () => {
+      try {
+        const response = await axios.get(
+          `https://us-central1-summaristt.cloudfunctions.net/getBooksByAuthorOrTitle?search=${encodeURIComponent(
+            searchQuery
+          )}`
+        );
+        if (response.data) {
+          setSearchResults(response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching search results:", error);
+        setSearchResults([]);
+      }
+    };
+
+    const debounceTimer = setTimeout(() => {
+      fetchSearchResults();
+    }, 300);
+
+    return () => clearTimeout(debounceTimer);
+  }, [searchQuery]);
 
   return (
     <div className="library-page">
@@ -202,7 +214,9 @@ function Library() {
             {savedBooks.length} {savedBooks.length === 1 ? "item" : "items"}
           </p>
           {loading ? (
-            <div className="library-loading">Loading...</div>
+            <div className="library-books">
+              <BookRowSkeleton />
+            </div>
           ) : savedBooks.length === 0 ? (
             <div className="library-empty">
               <h3 className="library-empty__title">

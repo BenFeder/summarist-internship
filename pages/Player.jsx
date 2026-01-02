@@ -9,6 +9,7 @@ import { db } from "../firebase-config";
 import { doc, setDoc } from "firebase/firestore";
 import { getAudioDuration, formatDuration } from "../utils/audioUtils";
 import Sidebar from "../components/Sidebar";
+import { BookDetailSkeleton } from "../components/BookSkeleton";
 
 function Player() {
   const { id } = useParams();
@@ -89,18 +90,29 @@ function Player() {
       setSearchResults([]);
       return;
     }
-    const query = searchQuery.toLowerCase();
-    const filtered = allBooks.filter((book) => {
-      return (
-        book.title.toLowerCase().includes(query) ||
-        book.author.toLowerCase().includes(query)
-      );
-    });
-    const uniqueFiltered = filtered.filter(
-      (book, index, self) => index === self.findIndex((b) => b.id === book.id)
-    );
-    setSearchResults(uniqueFiltered);
-  }, [searchQuery, allBooks]);
+
+    const fetchSearchResults = async () => {
+      try {
+        const response = await axios.get(
+          `https://us-central1-summaristt.cloudfunctions.net/getBooksByAuthorOrTitle?search=${encodeURIComponent(
+            searchQuery
+          )}`
+        );
+        if (response.data) {
+          setSearchResults(response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching search results:", error);
+        setSearchResults([]);
+      }
+    };
+
+    const debounceTimer = setTimeout(() => {
+      fetchSearchResults();
+    }, 300);
+
+    return () => clearTimeout(debounceTimer);
+  }, [searchQuery]);
 
   useEffect(() => {
     const loadAudioDurations = async () => {
@@ -262,7 +274,7 @@ function Player() {
           )}
         </div>
         {loading ? (
-          <div className="player-loading">Loading...</div>
+          <BookDetailSkeleton />
         ) : book ? (
           <>
             <div className="player-header">
