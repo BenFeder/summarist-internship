@@ -2,7 +2,8 @@ import React, { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "./firebase-config";
+import { auth, db } from "./firebase-config";
+import { doc, getDoc } from "firebase/firestore";
 import { setUser, clearUser } from "./redux/userSlice";
 import Home from "./pages/Home";
 import ForYou from "./pages/ForYou";
@@ -17,14 +18,37 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
-        dispatch(
-          setUser({
-            uid: user.uid,
-            email: user.email,
-          })
-        );
+        try {
+          // Fetch user data from Firestore
+          const userRef = doc(db, "users", user.uid);
+          const userDoc = await getDoc(userRef);
+
+          dispatch(
+            setUser({
+              uid: user.uid,
+              email: user.email,
+              isSubscribed: userDoc.exists()
+                ? userDoc.data()?.isSubscribed || false
+                : false,
+              subscriptionType: userDoc.exists()
+                ? userDoc.data()?.subscriptionType || null
+                : null,
+            })
+          );
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+          // Set user without subscription data if there's an error
+          dispatch(
+            setUser({
+              uid: user.uid,
+              email: user.email,
+              isSubscribed: false,
+              subscriptionType: null,
+            })
+          );
+        }
       } else {
         dispatch(clearUser());
       }

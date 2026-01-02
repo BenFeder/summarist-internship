@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import { db } from "../firebase-config";
 import { AiOutlineFileText } from "react-icons/ai";
 import { GiFlowerPot } from "react-icons/gi";
@@ -19,6 +19,8 @@ function ChoosePlan() {
   };
 
   const handleStartSubscription = async () => {
+    console.log("User object:", user);
+
     if (!user?.uid) {
       alert("Please log in to subscribe");
       return;
@@ -29,18 +31,30 @@ function ChoosePlan() {
       const subscriptionType =
         selectedPlan === "yearly" ? "Premium Plus" : "Premium";
 
-      await updateDoc(userRef, {
-        isSubscribed: true,
-        subscriptionType: subscriptionType,
-        subscriptionDate: new Date().toISOString(),
-      });
+      console.log("Attempting to update Firestore...");
+      console.log("User ID:", user.uid);
+      console.log("Subscription type:", subscriptionType);
+
+      await setDoc(
+        userRef,
+        {
+          isSubscribed: true,
+          subscriptionType: subscriptionType,
+          subscriptionDate: new Date().toISOString(),
+        },
+        { merge: true }
+      );
+
+      console.log("Subscription updated successfully!");
 
       // Redirect to for-you page after subscription
       navigate("/for-you");
       window.location.reload(); // Reload to update Redux state
     } catch (error) {
       console.error("Error updating subscription:", error);
-      alert("Failed to process subscription. Please try again.");
+      console.error("Error code:", error.code);
+      console.error("Error message:", error.message);
+      alert(`Failed to process subscription: ${error.message}`);
     }
   };
 

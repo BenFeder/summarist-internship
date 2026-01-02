@@ -4,6 +4,8 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import { AiOutlineSearch } from "react-icons/ai";
 import { FiPlay } from "react-icons/fi";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "../firebase-config";
 import { getAudioDuration, formatDuration } from "../utils/audioUtils";
 import Sidebar from "../components/Sidebar";
 
@@ -90,10 +92,38 @@ function Settings() {
     }
   }, [allBooks]);
 
-  const handleSubscriptionAction = () => {
+  const handleSubscriptionAction = async () => {
     if (isSubscribed) {
-      // Cancel plan logic - to be implemented later
-      console.log("Cancel plan");
+      // Cancel plan logic
+      if (!user?.uid) {
+        alert("Please log in to manage your subscription");
+        return;
+      }
+
+      const confirmCancel = window.confirm(
+        "Are you sure you want to cancel your subscription? You will lose access to premium features."
+      );
+
+      if (confirmCancel) {
+        try {
+          const userRef = doc(db, "users", user.uid);
+          await setDoc(
+            userRef,
+            {
+              isSubscribed: false,
+              subscriptionType: null,
+              cancelledDate: new Date().toISOString(),
+            },
+            { merge: true }
+          );
+
+          alert("Your subscription has been cancelled. Reloading...");
+          window.location.reload(); // Reload to update Redux state
+        } catch (error) {
+          console.error("Error cancelling subscription:", error);
+          alert(`Failed to cancel subscription: ${error.message}`);
+        }
+      }
     } else {
       // Navigate to upgrade page
       navigate("/choose-plan");
@@ -160,7 +190,7 @@ function Settings() {
           <div className="settings-section">
             <h2 className="settings-section__title">Your subscription plan</h2>
             <p className="settings-section__status">
-              {isSubscribed ? "Premium" : "Basic"}
+              {isSubscribed ? user?.subscriptionType || "Premium" : "Basic"}
             </p>
             <button
               className="settings-section__btn"
